@@ -11,7 +11,7 @@ export type APIConfig = {
     /**
      * - Type of Supercell API
      */
-    apiType: 'clashofclans' | 'clashroyale' | 'brawlstars';
+    apiType: "clashofclans" | "clashroyale" | "brawlstars";
 };
 export type APIHeaders = {
     /**
@@ -50,7 +50,7 @@ declare class SupercellAPI {
     /** @type {boolean} */
     useProxy: boolean;
     /** @type {'clashofclans' | 'clashroyale' | 'brawlstars'} */
-    apiType: 'clashofclans' | 'clashroyale' | 'brawlstars';
+    apiType: "clashofclans" | "clashroyale" | "brawlstars";
     /** @type {APIHeaders} */
     headers: APIHeaders;
     /** @type {string} */
@@ -61,5 +61,17 @@ declare class SupercellAPI {
      * @returns {string} The base URL for API requests
      */
     private getBaseUrl;
+    /**
+     * Validates and formats a player/clan tag
+     * @param {string} tag - The tag to format
+     * @returns {string} Formatted tag with URL encoding
+     */
+    formatTag(tag: string): string;
+    /**
+     * Builds query string from parameters
+     * @param {Object} params - Query parameters
+     * @returns {string} Query string
+     */
+    buildQuery(params: Object): string;
 }
 //# sourceMappingURL=SupercellAPI.d.ts.map

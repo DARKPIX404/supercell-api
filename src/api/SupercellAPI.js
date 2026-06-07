@@ -29,6 +29,11 @@ class SupercellAPI {
       throw new Error('API type is required');
     }
 
+    const validTypes = ['clashofclans', 'clashroyale', 'brawlstars'];
+    if (!validTypes.includes(apiType)) {
+      throw new Error(`Invalid API type. Must be one of: ${validTypes.join(', ')}`);
+    }
+
     /** @type {string} */
     this.token = token;
 
@@ -71,6 +76,35 @@ class SupercellAPI {
       return proxyMap[this.apiType];
     }
     return apiMap[this.apiType];
+  }
+
+  /**
+   * Validates and formats a player/clan tag
+   * @param {string} tag - The tag to format
+   * @returns {string} Formatted tag with URL encoding
+   */
+  formatTag(tag) {
+    if (!tag) {
+      throw new Error('Tag is required');
+    }
+    const formatted = tag.startsWith('#') ? tag : `#${tag}`;
+    return encodeURIComponent(formatted);
+  }
+
+  /**
+   * Builds query string from parameters
+   * @param {Object} params - Query parameters
+   * @returns {string} Query string
+   */
+  buildQuery(params) {
+    const searchParams = new URLSearchParams();
+    for (const [key, value] of Object.entries(params)) {
+      if (value !== undefined && value !== null && value !== '') {
+        searchParams.append(key, String(value));
+      }
+    }
+    const query = searchParams.toString();
+    return query ? `?${query}` : '';
   }
 }
 

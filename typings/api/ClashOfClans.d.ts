@@ -1,161 +1,212 @@
 export default ClashOfClans;
-export type PlayerData = {
-    /**
-     * - Player tag
-     */
-    tag: string;
-    /**
-     * - Player name
-     */
-    name: string;
-    /**
-     * - Town Hall level
-     */
-    townHallLevel: number;
-    /**
-     * - Experience level
-     */
-    expLevel: number;
-    /**
-     * - Current trophies
-     */
-    trophies: number;
-};
-export type ClanData = {
-    /**
-     * - Clan tag
-     */
-    tag: string;
-    /**
-     * - Clan name
-     */
-    name: string;
-    /**
-     * - Clan type
-     */
-    type: string;
-    /**
-     * - Clan description
-     */
-    description: string;
-    /**
-     * - Clan level
-     */
-    clanLevel: number;
-};
-export type LocationData = {
-    /**
-     * - Location ID
-     */
-    id: number;
-    /**
-     * - Location name
-     */
-    name: string;
-    /**
-     * - Whether the location is a country
-     */
-    isCountry: boolean;
-};
-export type ClanSearchParams = {
-    /**
-     * - Clan name to search
-     */
-    name?: string | undefined;
-    /**
-     * - Maximum results to return
-     */
-    limit?: number | undefined;
-    /**
-     * - War frequency
-     */
-    warFrequency?: string | undefined;
-    /**
-     * - Minimum member count
-     */
-    minMembers?: number | undefined;
-    /**
-     * - Maximum member count
-     */
-    maxMembers?: number | undefined;
-    /**
-     * - Minimum clan points
-     */
-    minClanPoints?: number | undefined;
-};
-/**
- * @typedef {Object} PlayerData
- * @property {string} tag - Player tag
- * @property {string} name - Player name
- * @property {number} townHallLevel - Town Hall level
- * @property {number} expLevel - Experience level
- * @property {number} trophies - Current trophies
- */
-/**
- * @typedef {Object} ClanData
- * @property {string} tag - Clan tag
- * @property {string} name - Clan name
- * @property {string} type - Clan type
- * @property {string} description - Clan description
- * @property {number} clanLevel - Clan level
- */
-/**
- * @typedef {Object} LocationData
- * @property {number} id - Location ID
- * @property {string} name - Location name
- * @property {boolean} isCountry - Whether the location is a country
- */
-/**
- * @typedef {Object} ClanSearchParams
- * @property {string} [name] - Clan name to search
- * @property {number} [limit] - Maximum results to return
- * @property {string} [warFrequency] - War frequency
- * @property {number} [minMembers] - Minimum member count
- * @property {number} [maxMembers] - Maximum member count
- * @property {number} [minClanPoints] - Minimum clan points
- */
 /**
  * @class ClashOfClans
- * @description Handles Clash of Clans API endpoints
+ * @description Handles all Clash of Clans API endpoints
  */
 declare class ClashOfClans {
     /**
      * @constructor
      * @param {import('./SupercellAPI.js').default} api - SupercellAPI instance
      */
-    constructor(api: import('./SupercellAPI.js').default);
+    constructor(api: import("./SupercellAPI.js").default);
+    api: import("./SupercellAPI.js").default;
     /**
-     * @method getPlayer
-     * @description Fetch player information by tag
+     * Get player information by tag
      * @param {string} playerTag - Player tag with or without '#'
-     * @returns {Promise<PlayerData>} Player data
-     * @throws {Error} If the player tag is invalid or player not found
+     * @returns {Promise<Object>} Player data
      */
-    getPlayer(playerTag: string): Promise<PlayerData>;
+    getPlayer(playerTag: string): Promise<Object>;
     /**
-     * @method getClan
-     * @description Fetch clan information by tag
+     * Verify player API token
+     * @param {string} playerTag - Player tag
+     * @param {string} token - API token to verify
+     * @returns {Promise<Object>} Verification result
+     */
+    verifyPlayerToken(playerTag: string, token: string): Promise<Object>;
+    /**
+     * Search for clans
+     * @param {Object} params - Search parameters
+     * @param {string} [params.name] - Clan name
+     * @param {string} [params.warFrequency] - War frequency
+     * @param {number} [params.minMembers] - Minimum members
+     * @param {number} [params.maxMembers] - Maximum members
+     * @param {number} [params.minClanPoints] - Minimum clan points
+     * @param {number} [params.minClanLevel] - Minimum clan level
+     * @param {number} [params.limit] - Max results (1-50)
+     * @param {string} [params.after] - Cursor for pagination
+     * @param {string} [params.before] - Cursor for pagination
+     * @param {string} [params.labelIds] - Label IDs comma separated
+     * @returns {Promise<Object>} Search results
+     */
+    searchClans(params?: {
+        name?: string | undefined;
+        warFrequency?: string | undefined;
+        minMembers?: number | undefined;
+        maxMembers?: number | undefined;
+        minClanPoints?: number | undefined;
+        minClanLevel?: number | undefined;
+        limit?: number | undefined;
+        after?: string | undefined;
+        before?: string | undefined;
+        labelIds?: string | undefined;
+    }): Promise<Object>;
+    /**
+     * Get clan information by tag
      * @param {string} clanTag - Clan tag with or without '#'
-     * @returns {Promise<ClanData>} Clan data
-     * @throws {Error} If the clan tag is invalid or clan not found
+     * @returns {Promise<Object>} Clan data
      */
-    getClan(clanTag: string): Promise<ClanData>;
+    getClan(clanTag: string): Promise<Object>;
     /**
-     * @method searchClans
-     * @description Search for clans using filters
-     * @param {ClanSearchParams} params - Search parameters
-     * @returns {Promise<Array<ClanData>>} Array of matching clans
-     * @throws {Error} If the search parameters are invalid
+     * Get clan members
+     * @param {string} clanTag - Clan tag
+     * @param {Object} [options] - Options
+     * @param {number} [options.limit] - Max results
+     * @param {string} [options.after] - Cursor
+     * @param {string} [options.before] - Cursor
+     * @returns {Promise<Object>} Clan members
      */
-    searchClans(params?: ClanSearchParams): Promise<Array<ClanData>>;
+    getClanMembers(clanTag: string, options?: {
+        limit?: number | undefined;
+        after?: string | undefined;
+        before?: string | undefined;
+    }): Promise<Object>;
     /**
-     * @method getLocations
-     * @description Get list of available locations
-     * @param {number} [limit=10] - Maximum results to return
-     * @returns {Promise<Array<LocationData>>} Array of location data
-     * @throws {Error} If the request fails
+     * Get clan war log
+     * @param {string} clanTag - Clan tag
+     * @param {Object} [options] - Options
+     * @param {number} [options.limit] - Max results
+     * @param {string} [options.after] - Cursor
+     * @param {string} [options.before] - Cursor
+     * @returns {Promise<Object>} War log
      */
-    getLocations(limit?: number | undefined): Promise<Array<LocationData>>;
+    getClanWarLog(clanTag: string, options?: {
+        limit?: number | undefined;
+        after?: string | undefined;
+        before?: string | undefined;
+    }): Promise<Object>;
+    /**
+     * Get current war information
+     * @param {string} clanTag - Clan tag
+     * @returns {Promise<Object>} Current war data
+     */
+    getCurrentWar(clanTag: string): Promise<Object>;
+    /**
+     * Get CWL group information
+     * @param {string} clanTag - Clan tag
+     * @returns {Promise<Object>} CWL group data
+     */
+    getWarLeagueGroup(clanTag: string): Promise<Object>;
+    /**
+     * Get CWL war information
+     * @param {string} warTag - War tag
+     * @returns {Promise<Object>} War data
+     */
+    getWarLeagueWar(warTag: string): Promise<Object>;
+    /**
+     * Get list of locations
+     * @param {Object} [options] - Options
+     * @param {number} [options.limit] - Max results
+     * @param {string} [options.after] - Cursor
+     * @param {string} [options.before] - Cursor
+     * @returns {Promise<Object>} Locations list
+     */
+    getLocations(options?: {
+        limit?: number | undefined;
+        after?: string | undefined;
+        before?: string | undefined;
+    }): Promise<Object>;
+    /**
+     * Get location information
+     * @param {number|string} locationId - Location ID
+     * @returns {Promise<Object>} Location data
+     */
+    getLocation(locationId: number | string): Promise<Object>;
+    /**
+     * Get clan rankings for a location
+     * @param {number|string} locationId - Location ID
+     * @param {Object} [options] - Options
+     * @param {number} [options.limit] - Max results
+     * @param {string} [options.after] - Cursor
+     * @param {string} [options.before] - Cursor
+     * @returns {Promise<Object>} Rankings
+     */
+    getClanRankings(locationId: number | string, options?: {
+        limit?: number | undefined;
+        after?: string | undefined;
+        before?: string | undefined;
+    }): Promise<Object>;
+    /**
+     * Get player rankings for a location
+     * @param {number|string} locationId - Location ID
+     * @param {Object} [options] - Options
+     * @returns {Promise<Object>} Rankings
+     */
+    getPlayerRankings(locationId: number | string, options?: Object): Promise<Object>;
+    /**
+     * Get versus clan rankings for a location
+     * @param {number|string} locationId - Location ID
+     * @param {Object} [options] - Options
+     * @returns {Promise<Object>} Rankings
+     */
+    getVersusClanRankings(locationId: number | string, options?: Object): Promise<Object>;
+    /**
+     * Get versus player rankings for a location
+     * @param {number|string} locationId - Location ID
+     * @param {Object} [options] - Options
+     * @returns {Promise<Object>} Rankings
+     */
+    getVersusPlayerRankings(locationId: number | string, options?: Object): Promise<Object>;
+    /**
+     * Get capital rankings for a location
+     * @param {number|string} locationId - Location ID
+     * @param {Object} [options] - Options
+     * @returns {Promise<Object>} Rankings
+     */
+    getCapitalRankings(locationId: number | string, options?: Object): Promise<Object>;
+    /**
+     * Get list of leagues
+     * @param {Object} [options] - Options
+     * @returns {Promise<Object>} Leagues list
+     */
+    getLeagues(options?: Object): Promise<Object>;
+    /**
+     * Get league information
+     * @param {number|string} leagueId - League ID
+     * @returns {Promise<Object>} League data
+     */
+    getLeague(leagueId: number | string): Promise<Object>;
+    /**
+     * Get league seasons
+     * @param {number|string} leagueId - League ID
+     * @param {Object} [options] - Options
+     * @returns {Promise<Object>} Seasons list
+     */
+    getLeagueSeasons(leagueId: number | string, options?: Object): Promise<Object>;
+    /**
+     * Get league season rankings
+     * @param {number|string} leagueId - League ID
+     * @param {string} seasonId - Season ID
+     * @param {Object} [options] - Options
+     * @returns {Promise<Object>} Season rankings
+     */
+    getLeagueSeasonRankings(leagueId: number | string, seasonId: string, options?: Object): Promise<Object>;
+    /**
+     * Get player labels
+     * @param {Object} [options] - Options
+     * @returns {Promise<Object>} Labels list
+     */
+    getPlayerLabels(options?: Object): Promise<Object>;
+    /**
+     * Get clan labels
+     * @param {Object} [options] - Options
+     * @returns {Promise<Object>} Labels list
+     */
+    getClanLabels(options?: Object): Promise<Object>;
+    /**
+     * Get current gold pass season
+     * @returns {Promise<Object>} Gold pass data
+     */
+    getGoldPassSeason(): Promise<Object>;
     #private;
 }
 //# sourceMappingURL=ClashOfClans.d.ts.map

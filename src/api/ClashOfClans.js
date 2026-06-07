@@ -1,43 +1,8 @@
 import Fetcher from './Fetcher.js';
 
 /**
- * @typedef {Object} PlayerData
- * @property {string} tag - Player tag
- * @property {string} name - Player name
- * @property {number} townHallLevel - Town Hall level
- * @property {number} expLevel - Experience level
- * @property {number} trophies - Current trophies
- */
-
-/**
- * @typedef {Object} ClanData
- * @property {string} tag - Clan tag
- * @property {string} name - Clan name
- * @property {string} type - Clan type
- * @property {string} description - Clan description
- * @property {number} clanLevel - Clan level
- */
-
-/**
- * @typedef {Object} LocationData
- * @property {number} id - Location ID
- * @property {string} name - Location name
- * @property {boolean} isCountry - Whether the location is a country
- */
-
-/**
- * @typedef {Object} ClanSearchParams
- * @property {string} [name] - Clan name to search
- * @property {number} [limit] - Maximum results to return
- * @property {string} [warFrequency] - War frequency
- * @property {number} [minMembers] - Minimum member count
- * @property {number} [maxMembers] - Maximum member count
- * @property {number} [minClanPoints] - Minimum clan points
- */
-
-/**
  * @class ClashOfClans
- * @description Handles Clash of Clans API endpoints
+ * @description Handles all Clash of Clans API endpoints
  */
 class ClashOfClans {
   #fetcher;
@@ -48,63 +13,280 @@ class ClashOfClans {
    */
   constructor(api) {
     this.#fetcher = new Fetcher(api);
+    this.api = api;
   }
 
+  // ===== PLAYERS =====
+
   /**
-   * @method getPlayer
-   * @description Fetch player information by tag
+   * Get player information by tag
    * @param {string} playerTag - Player tag with or without '#'
-   * @returns {Promise<PlayerData>} Player data
-   * @throws {Error} If the player tag is invalid or player not found
+   * @returns {Promise<Object>} Player data
    */
   async getPlayer(playerTag) {
-    if (!playerTag.startsWith('#')) {
-      playerTag = `#${playerTag}`;
-    }
-    const encodedTag = encodeURIComponent(playerTag);
-    return this.#fetcher.fetchData(`/players/${encodedTag}`);
+    const tag = this.api.formatTag(playerTag);
+    return this.#fetcher.fetchData(`/players/${tag}`);
   }
 
   /**
-   * @method getClan
-   * @description Fetch clan information by tag
-   * @param {string} clanTag - Clan tag with or without '#'
-   * @returns {Promise<ClanData>} Clan data
-   * @throws {Error} If the clan tag is invalid or clan not found
+   * Verify player API token
+   * @param {string} playerTag - Player tag
+   * @param {string} token - API token to verify
+   * @returns {Promise<Object>} Verification result
    */
-  async getClan(clanTag) {
-    if (!clanTag.startsWith('#')) {
-      clanTag = `#${clanTag}`;
-    }
-    const encodedTag = encodeURIComponent(clanTag);
-    return this.#fetcher.fetchData(`/clans/${encodedTag}`);
+  async verifyPlayerToken(playerTag, token) {
+    const tag = this.api.formatTag(playerTag);
+    return this.#fetcher.postData(`/players/${tag}/verifytoken`, { token });
   }
 
+  // ===== CLANS =====
+
   /**
-   * @method searchClans
-   * @description Search for clans using filters
-   * @param {ClanSearchParams} params - Search parameters
-   * @returns {Promise<Array<ClanData>>} Array of matching clans
-   * @throws {Error} If the search parameters are invalid
+   * Search for clans
+   * @param {Object} params - Search parameters
+   * @param {string} [params.name] - Clan name
+   * @param {string} [params.warFrequency] - War frequency
+   * @param {number} [params.minMembers] - Minimum members
+   * @param {number} [params.maxMembers] - Maximum members
+   * @param {number} [params.minClanPoints] - Minimum clan points
+   * @param {number} [params.minClanLevel] - Minimum clan level
+   * @param {number} [params.limit] - Max results (1-50)
+   * @param {string} [params.after] - Cursor for pagination
+   * @param {string} [params.before] - Cursor for pagination
+   * @param {string} [params.labelIds] - Label IDs comma separated
+   * @returns {Promise<Object>} Search results
    */
   async searchClans(params = {}) {
-    const { name = '', limit = 10 } = params;
-    const searchParams = new URLSearchParams({
-      name,
-      limit: limit.toString(),
-    }).toString();
-    return this.#fetcher.fetchData(`/clans?${searchParams}`);
+    const query = this.api.buildQuery(params);
+    return this.#fetcher.fetchData(`/clans${query}`);
   }
 
   /**
-   * @method getLocations
-   * @description Get list of available locations
-   * @param {number} [limit=10] - Maximum results to return
-   * @returns {Promise<Array<LocationData>>} Array of location data
-   * @throws {Error} If the request fails
+   * Get clan information by tag
+   * @param {string} clanTag - Clan tag with or without '#'
+   * @returns {Promise<Object>} Clan data
    */
-  async getLocations(limit = 10) {
-    return this.#fetcher.fetchData(`/locations?limit=${limit}`);
+  async getClan(clanTag) {
+    const tag = this.api.formatTag(clanTag);
+    return this.#fetcher.fetchData(`/clans/${tag}`);
+  }
+
+  /**
+   * Get clan members
+   * @param {string} clanTag - Clan tag
+   * @param {Object} [options] - Options
+   * @param {number} [options.limit] - Max results
+   * @param {string} [options.after] - Cursor
+   * @param {string} [options.before] - Cursor
+   * @returns {Promise<Object>} Clan members
+   */
+  async getClanMembers(clanTag, options = {}) {
+    const tag = this.api.formatTag(clanTag);
+    const query = this.api.buildQuery(options);
+    return this.#fetcher.fetchData(`/clans/${tag}/members${query}`);
+  }
+
+  /**
+   * Get clan war log
+   * @param {string} clanTag - Clan tag
+   * @param {Object} [options] - Options
+   * @param {number} [options.limit] - Max results
+   * @param {string} [options.after] - Cursor
+   * @param {string} [options.before] - Cursor
+   * @returns {Promise<Object>} War log
+   */
+  async getClanWarLog(clanTag, options = {}) {
+    const tag = this.api.formatTag(clanTag);
+    const query = this.api.buildQuery(options);
+    return this.#fetcher.fetchData(`/clans/${tag}/warlog${query}`);
+  }
+
+  /**
+   * Get current war information
+   * @param {string} clanTag - Clan tag
+   * @returns {Promise<Object>} Current war data
+   */
+  async getCurrentWar(clanTag) {
+    const tag = this.api.formatTag(clanTag);
+    return this.#fetcher.fetchData(`/clans/${tag}/currentwar`);
+  }
+
+  /**
+   * Get CWL group information
+   * @param {string} clanTag - Clan tag
+   * @returns {Promise<Object>} CWL group data
+   */
+  async getWarLeagueGroup(clanTag) {
+    const tag = this.api.formatTag(clanTag);
+    return this.#fetcher.fetchData(`/clans/${tag}/currentwar/leaguegroup`);
+  }
+
+  /**
+   * Get CWL war information
+   * @param {string} warTag - War tag
+   * @returns {Promise<Object>} War data
+   */
+  async getWarLeagueWar(warTag) {
+    const tag = this.api.formatTag(warTag);
+    return this.#fetcher.fetchData(`/clanwarleagues/wars/${tag}`);
+  }
+
+  // ===== LOCATIONS =====
+
+  /**
+   * Get list of locations
+   * @param {Object} [options] - Options
+   * @param {number} [options.limit] - Max results
+   * @param {string} [options.after] - Cursor
+   * @param {string} [options.before] - Cursor
+   * @returns {Promise<Object>} Locations list
+   */
+  async getLocations(options = {}) {
+    const query = this.api.buildQuery(options);
+    return this.#fetcher.fetchData(`/locations${query}`);
+  }
+
+  /**
+   * Get location information
+   * @param {number|string} locationId - Location ID
+   * @returns {Promise<Object>} Location data
+   */
+  async getLocation(locationId) {
+    return this.#fetcher.fetchData(`/locations/${locationId}`);
+  }
+
+  /**
+   * Get clan rankings for a location
+   * @param {number|string} locationId - Location ID
+   * @param {Object} [options] - Options
+   * @param {number} [options.limit] - Max results
+   * @param {string} [options.after] - Cursor
+   * @param {string} [options.before] - Cursor
+   * @returns {Promise<Object>} Rankings
+   */
+  async getClanRankings(locationId, options = {}) {
+    const query = this.api.buildQuery(options);
+    return this.#fetcher.fetchData(`/locations/${locationId}/rankings/clans${query}`);
+  }
+
+  /**
+   * Get player rankings for a location
+   * @param {number|string} locationId - Location ID
+   * @param {Object} [options] - Options
+   * @returns {Promise<Object>} Rankings
+   */
+  async getPlayerRankings(locationId, options = {}) {
+    const query = this.api.buildQuery(options);
+    return this.#fetcher.fetchData(`/locations/${locationId}/rankings/players${query}`);
+  }
+
+  /**
+   * Get versus clan rankings for a location
+   * @param {number|string} locationId - Location ID
+   * @param {Object} [options] - Options
+   * @returns {Promise<Object>} Rankings
+   */
+  async getVersusClanRankings(locationId, options = {}) {
+    const query = this.api.buildQuery(options);
+    return this.#fetcher.fetchData(`/locations/${locationId}/rankings/versus-clans${query}`);
+  }
+
+  /**
+   * Get versus player rankings for a location
+   * @param {number|string} locationId - Location ID
+   * @param {Object} [options] - Options
+   * @returns {Promise<Object>} Rankings
+   */
+  async getVersusPlayerRankings(locationId, options = {}) {
+    const query = this.api.buildQuery(options);
+    return this.#fetcher.fetchData(`/locations/${locationId}/rankings/versus-players${query}`);
+  }
+
+  /**
+   * Get capital rankings for a location
+   * @param {number|string} locationId - Location ID
+   * @param {Object} [options] - Options
+   * @returns {Promise<Object>} Rankings
+   */
+  async getCapitalRankings(locationId, options = {}) {
+    const query = this.api.buildQuery(options);
+    return this.#fetcher.fetchData(`/locations/${locationId}/rankings/capitals${query}`);
+  }
+
+  // ===== LEAGUES =====
+
+  /**
+   * Get list of leagues
+   * @param {Object} [options] - Options
+   * @returns {Promise<Object>} Leagues list
+   */
+  async getLeagues(options = {}) {
+    const query = this.api.buildQuery(options);
+    return this.#fetcher.fetchData(`/leagues${query}`);
+  }
+
+  /**
+   * Get league information
+   * @param {number|string} leagueId - League ID
+   * @returns {Promise<Object>} League data
+   */
+  async getLeague(leagueId) {
+    return this.#fetcher.fetchData(`/leagues/${leagueId}`);
+  }
+
+  /**
+   * Get league seasons
+   * @param {number|string} leagueId - League ID
+   * @param {Object} [options] - Options
+   * @returns {Promise<Object>} Seasons list
+   */
+  async getLeagueSeasons(leagueId, options = {}) {
+    const query = this.api.buildQuery(options);
+    return this.#fetcher.fetchData(`/leagues/${leagueId}/seasons${query}`);
+  }
+
+  /**
+   * Get league season rankings
+   * @param {number|string} leagueId - League ID
+   * @param {string} seasonId - Season ID
+   * @param {Object} [options] - Options
+   * @returns {Promise<Object>} Season rankings
+   */
+  async getLeagueSeasonRankings(leagueId, seasonId, options = {}) {
+    const query = this.api.buildQuery(options);
+    return this.#fetcher.fetchData(`/leagues/${leagueId}/seasons/${seasonId}${query}`);
+  }
+
+  // ===== LABELS =====
+
+  /**
+   * Get player labels
+   * @param {Object} [options] - Options
+   * @returns {Promise<Object>} Labels list
+   */
+  async getPlayerLabels(options = {}) {
+    const query = this.api.buildQuery(options);
+    return this.#fetcher.fetchData(`/labels/players${query}`);
+  }
+
+  /**
+   * Get clan labels
+   * @param {Object} [options] - Options
+   * @returns {Promise<Object>} Labels list
+   */
+  async getClanLabels(options = {}) {
+    const query = this.api.buildQuery(options);
+    return this.#fetcher.fetchData(`/labels/clans${query}`);
+  }
+
+  // ===== GOLD PASS =====
+
+  /**
+   * Get current gold pass season
+   * @returns {Promise<Object>} Gold pass data
+   */
+  async getGoldPassSeason() {
+    return this.#fetcher.fetchData('/goldpass/seasons/current');
   }
 }
 
