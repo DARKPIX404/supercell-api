@@ -1,6 +1,6 @@
 {
   "name": "@vladnet14/supercell-api",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "A comprehensive JavaScript library for interacting with Supercell game APIs (Clash of Clans, Clash Royale, Brawl Stars)",
   "main": "./src/index.js",
   "types": "./typings/index.d.ts",
