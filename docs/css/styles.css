@@ -58,6 +58,17 @@ main.content {
     margin: 32px 0;
 }
 
+.version {
+    display: inline-block;
+    background: var(--primary-color);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-top: 8px;
+}
+
 .logo {
     width: 48px;
     height: 48px;
