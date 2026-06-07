@@ -30,7 +30,10 @@
   "homepage": "https://darkpix404.github.io/supercell-api/",
   "scripts": {
     "build": "tsc",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
   },
   "keywords": [
     "supercell",
@@ -44,7 +47,8 @@
   "author": "Vladislav Borodatyi <vlad.borodaty228032qw@gmail.com>",
   "license": "Apache-2.0",
   "devDependencies": {
+    "@types/node": "^22.0.0",
     "typescript": "^5.7.0",
-    "@types/node": "^22.0.0"
+    "vitepress": "^1.6.4"
   }
 }
