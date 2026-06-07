@@ -1,15 +1,19 @@
 # Supercell API Client
 
-A comprehensive JavaScript library for interacting with the Supercell game APIs, such as **Clash of Clans**, **Clash Royale**, and **Brawl Stars**.
+[![npm version](https://img.shields.io/npm/v/@vladnet14/supercell-api)](https://www.npmjs.com/package/@vladnet14/supercell-api)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+
+A comprehensive **TypeScript** library for interacting with official Supercell game APIs: **Clash of Clans**, **Clash Royale**, and **Brawl Stars**.
 
 ## Features
 
-- **Full API Coverage** — All endpoints for Clash of Clans, Clash Royale, and Brawl Stars
-- **Rate Limiting** — Built-in request throttling to respect API limits
-- **Auto-Retry** — Automatic retry with exponential backoff on failures
-- **Proxy Support** — Built-in proxy support for development environments
-- **TypeScript Support** — Full type definitions included
-- **ESM & CommonJS** — Works with both module systems
+- 🎮 **Full API Coverage** — 50+ methods across all 3 games
+- ⚡ **Rate Limiting & Auto-Retry** — Built-in throttling with exponential backoff
+- 💾 **Smart Cache** — In-memory TTL cache for repeated requests
+- 🔌 **Interceptors** — Request, response and error hooks
+- 🛡️ **TypeScript** — Full type definitions and generic support
+- 🌐 **Proxy Support** — Built-in proxies for development without static IP
+- 📦 **Batch Requests** — Fetch multiple players/clans in parallel
 
 ## Installation
 
@@ -17,151 +21,126 @@ A comprehensive JavaScript library for interacting with the Supercell game APIs,
 npm install @vladnet14/supercell-api
 ```
 
-## Getting Started
+## Quick Start
 
-```javascript
-import SupercellClient from '@vladnet14/supercell-api';
+```typescript
+import { SupercellClient } from '@vladnet14/supercell-api';
 
 const client = new SupercellClient({
   token: 'YOUR_API_TOKEN',
   apiType: 'clashofclans', // or 'clashroyale', 'brawlstars'
-  useProxy: false, // set true if you don't have a static IP
+  useProxy: false,
+  cacheEnabled: true,
+  cacheTtl: 60000,
 });
 
-// Get player info
-const player = await client.endpoints.getPlayer('#PLAYER_TAG');
-console.log(player.name, player.expLevel);
+// Get player
+const player = await client.api.getPlayer('#PLAYER_TAG');
+console.log(`Player: ${player.name}, Level: ${player.expLevel}`);
 
-// Get clan info
-const clan = await client.endpoints.getClan('#CLAN_TAG');
-console.log(clan.name, clan.clanLevel);
+// Get clan
+const clan = await client.api.getClan('#CLAN_TAG');
+console.log(`Clan: ${clan.name}, Level: ${clan.clanLevel}`);
+
+// Batch fetch multiple players
+const players = await client.api.getPlayers(['#TAG1', '#TAG2', '#TAG3']);
 
 // Search clans
-const clans = await client.endpoints.searchClans({ name: 'CRUVO', limit: 10 });
-console.log(clans.items.map(c => c.name));
+const clans = await client.api.searchClans({ name: 'CRUVO', limit: 10 });
+console.log('Found clans:', clans.items?.map((c) => c.name));
 ```
 
-## API Types
+## Configuration
+
+```typescript
+interface ClientConfig {
+  token: string;              // API token from Supercell developer portal
+  apiType: ApiType;           // 'clashofclans' | 'clashroyale' | 'brawlstars'
+  useProxy?: boolean;         // Use RoyaleAPI proxy (default: false)
+  timeout?: number;           // Request timeout in ms (default: 30000)
+  retries?: number;           // Retry attempts (default: 3)
+  cacheEnabled?: boolean;     // Enable caching (default: true)
+  cacheTtl?: number;          // Cache TTL in ms (default: 60000)
+}
+```
+
+## Interceptors
+
+```typescript
+// Log all requests
+client.addRequestInterceptor((url, options) => {
+  console.log(`Request: ${options.method} ${url}`);
+});
+
+// Handle errors globally
+client.addErrorInterceptor((error) => {
+  console.error('API Error:', error.message);
+});
+```
+
+## API Reference
 
 ### Clash of Clans
 
-```javascript
-const client = new SupercellClient({ token: 'TOKEN', apiType: 'clashofclans' });
-const api = client.endpoints;
-
-// Players
-api.getPlayer('#TAG');
-api.verifyPlayerToken('#TAG', 'token');
-
-// Clans
-api.searchClans({ name: 'ClanName', limit: 10 });
-api.getClan('#TAG');
-api.getClanMembers('#TAG', { limit: 50 });
-api.getClanWarLog('#TAG');
-api.getCurrentWar('#TAG');
-api.getWarLeagueGroup('#TAG');
-api.getWarLeagueWar('#WAR_TAG');
-
-// Locations
-api.getLocations();
-api.getLocation(locationId);
-api.getClanRankings(locationId);
-api.getPlayerRankings(locationId);
-api.getVersusClanRankings(locationId);
-api.getVersusPlayerRankings(locationId);
-api.getCapitalRankings(locationId);
-
-// Leagues
-api.getLeagues();
-api.getLeague(leagueId);
-api.getLeagueSeasons(leagueId);
-api.getLeagueSeasonRankings(leagueId, seasonId);
-
-// Labels
-api.getPlayerLabels();
-api.getClanLabels();
-
-// Gold Pass
-api.getGoldPassSeason();
-```
+| Method | Description |
+|--------|-------------|
+| `getPlayer(tag)` | Fetch player info |
+| `verifyPlayerToken(tag, token)` | Verify player API token |
+| `searchClans(params)` | Search clans with filters |
+| `getClan(tag)` | Fetch clan info |
+| `getClanMembers(tag, opts)` | Get clan members |
+| `getClanWarLog(tag, opts)` | Get war log |
+| `getCurrentWar(tag)` | Get current war |
+| `getWarLeagueGroup(tag)` | Get CWL group |
+| `getWarLeagueWar(warTag)` | Get CWL war |
+| `getLocations(opts)` | List locations |
+| `getClanRankings(locId, opts)` | Clan rankings |
+| `getPlayerRankings(locId, opts)` | Player rankings |
+| `getLeagues(opts)` | List leagues |
+| `getGoldPassSeason()` | Current Gold Pass |
+| `getPlayers(tags[])` | Batch fetch players |
 
 ### Clash Royale
 
-```javascript
-const client = new SupercellClient({ token: 'TOKEN', apiType: 'clashroyale' });
-const api = client.endpoints;
-
-// Players
-api.getPlayer('#TAG');
-api.getUpcomingChests('#TAG');
-api.getBattleLog('#TAG');
-
-// Clans
-api.searchClans({ name: 'ClanName' });
-api.getClan('#TAG');
-api.getClanMembers('#TAG');
-api.getClanWarLog('#TAG');
-api.getCurrentWar('#TAG');
-
-// Tournaments
-api.searchTournaments({ name: 'Tournament' });
-api.getTournament('#TAG');
-
-// Cards
-api.getCards();
-
-// Locations
-api.getLocations();
-api.getLocation(locationId);
-api.getPlayerRankings(locationId);
-api.getClanRankings(locationId);
-api.getClanWarRankings(locationId);
-
-// Challenges
-api.getChallenges();
-
-// Global Tournaments
-api.getGlobalTournaments();
-```
+| Method | Description |
+|--------|-------------|
+| `getPlayer(tag)` | Fetch player info |
+| `getUpcomingChests(tag)` | Upcoming chests |
+| `getBattleLog(tag)` | Battle log |
+| `searchClans(params)` | Search clans |
+| `getClan(tag)` | Fetch clan info |
+| `getClanWarLog(tag, opts)` | War log |
+| `getCurrentWar(tag)` | Current war |
+| `searchTournaments(params)` | Search tournaments |
+| `getTournament(tag)` | Tournament info |
+| `getCards(opts)` | All cards |
+| `getLocations(opts)` | List locations |
+| `getPlayerRankings(locId, opts)` | Rankings |
+| `getChallenges(opts)` | Challenges |
+| `getGlobalTournaments(opts)` | Global tournaments |
 
 ### Brawl Stars
 
-```javascript
-const client = new SupercellClient({ token: 'TOKEN', apiType: 'brawlstars' });
-const api = client.endpoints;
+| Method | Description |
+|--------|-------------|
+| `getPlayer(tag)` | Fetch player info |
+| `getBattleLog(tag)` | Battle log |
+| `getClub(tag)` | Fetch club info |
+| `getClubMembers(tag, opts)` | Club members |
+| `getBrawlers(opts)` | All brawlers |
+| `getBrawler(id)` | Brawler info |
+| `getPlayerRankings(code, opts)` | Rankings |
+| `getClubRankings(code, opts)` | Club rankings |
+| `getBrawlerRankings(code, id, opts)` | Brawler rankings |
+| `getEvents()` | Current events |
 
-// Players
-api.getPlayer('#TAG');
-api.getBattleLog('#TAG');
+## Links
 
-// Clubs
-api.getClub('#TAG');
-api.getClubMembers('#TAG');
-
-// Brawlers
-api.getBrawlers();
-api.getBrawler(brawlerId);
-
-// Rankings
-api.getPlayerRankings('global');
-api.getClubRankings('US');
-api.getBrawlerRankings('global', brawlerId);
-
-// Events
-api.getEvents();
-```
-
-## Proxy Usage
-
-If your server does not have a static IP, enable proxy mode:
-
-```javascript
-const client = new SupercellClient({
-  token: 'YOUR_API_TOKEN',
-  apiType: 'clashofclans',
-  useProxy: true,
-});
-```
+- 📖 [Documentation](https://darkpix404.github.io/supercell-api/)
+- 💻 [GitHub](https://github.com/DARKPIX404/supercell-api)
+- 📦 [npm](https://www.npmjs.com/package/@vladnet14/supercell-api)
+- 💬 [Discord](https://discord.gg/dYkUJQaU6y)
+- 🌐 [Website](https://darkpix.ru)
 
 ## License
 

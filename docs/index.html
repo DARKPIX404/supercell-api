@@ -1,438 +1,556 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Supercell API Documentation</title>
-    <link rel="stylesheet" href="./css/styles.css?v=2" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/github-dark.min.css" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" />
-    <link rel="icon" type="image/svg+xml" href="./assets/logo.svg" />
-    <meta name="description" content="Supercell API Client v3.0.0 - Complete documentation for Clash of Clans, Clash Royale and Brawl Stars APIs" />
-  </head>
-  <body>
-    <button class="menu-toggle" aria-label="Toggle menu">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <line x1="4" y1="6" x2="20" y2="6" class="line line-1" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-        <line x1="4" y1="12" x2="20" y2="12" class="line line-2" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-        <line x1="4" y1="18" x2="20" y2="18" class="line line-3" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-      </svg>
-    </button>
-    <div class="overlay"></div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Supercell API Client — Documentation</title>
+  <link rel="stylesheet" href="./css/styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
+  <meta name="description" content="Supercell API Client v3.1.0 — Complete TypeScript documentation for Clash of Clans, Clash Royale and Brawl Stars APIs" />
+</head>
+<body>
 
-    <nav class="sidebar">
-      <div class="sidebar-header">
-        <h1>Supercell API</h1>
-        <span class="version">v3.0.0</span>
-      </div>
-      <ul class="nav-links">
+<header class="site-header">
+  <div class="header-inner">
+    <a href="#" class="logo">
+      <div class="logo-icon">⚡</div>
+      Supercell API <span class="version-badge">v3.1.0</span>
+    </a>
+    <nav class="header-links">
+      <a href="https://darkpix.ru" target="_blank" rel="noopener">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 18 0 9 9 0 0 0-18 0Z"/><path d="M3.6 9h16.8M3.6 15h16.8M12 3a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10Z"/></svg>
+        <span>Website</span>
+      </a>
+      <a href="https://github.com/DARKPIX404/supercell-api" target="_blank" rel="noopener">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.17c-3.34.73-4.04-1.6-4.04-1.6-.55-1.39-1.33-1.76-1.33-1.76-1.09-.75.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.49 1 .11-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.12-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 6 0c2.28-1.55 3.29-1.23 3.29-1.23.66 1.66.24 2.88.12 3.18.77.84 1.24 1.91 1.24 3.22 0 4.61-2.8 5.63-5.48 5.92.43.37.82 1.1.82 2.22v3.29c0 .32.22.7.83.58C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12Z"/></svg>
+        <span>GitHub</span>
+      </a>
+      <a href="https://discord.gg/dYkUJQaU6y" target="_blank" rel="noopener">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03ZM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.418 2.157-2.418 1.21 0 2.176 1.094 2.157 2.418 0 1.334-.956 2.419-2.157 2.419Zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.418 2.157-2.418 1.21 0 2.176 1.094 2.157 2.418 0 1.334-.946 2.419-2.157 2.419Z"/></svg>
+        <span>Discord</span>
+      </a>
+      <a href="https://www.npmjs.com/package/@vladnet14/supercell-api" target="_blank" rel="noopener" class="btn-primary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37Z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+        <span>npm</span>
+      </a>
+    </nav>
+  </div>
+</header>
+
+<div class="layout">
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title">Guide</div>
+      <ul class="sidebar-nav">
         <li><a href="#getting-started" class="active">Getting Started</a></li>
         <li><a href="#installation">Installation</a></li>
-        <li><a href="#usage">Usage</a></li>
-        <li>
-          <a href="#api-reference">API Reference</a>
-          <ul class="sub-nav">
-            <li><a href="#clash-of-clans">Clash of Clans</a></li>
-            <li><a href="#clash-royale">Clash Royale</a></li>
-            <li><a href="#brawl-stars">Brawl Stars</a></li>
-          </ul>
-        </li>
+        <li><a href="#configuration">Configuration</a></li>
+        <li><a href="#interceptors">Interceptors</a></li>
       </ul>
-    </nav>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">API Reference</div>
+      <ul class="sidebar-nav">
+        <li><a href="#clash-of-clans">Clash of Clans</a></li>
+        <li><a href="#clash-royale">Clash Royale</a></li>
+        <li><a href="#brawl-stars">Brawl Stars</a></li>
+      </ul>
+    </div>
+  </aside>
 
-    <main class="content">
-      <div class="search-container">
-        <input type="search" id="search" placeholder="Search documentation..." autocomplete="off" spellcheck="false" aria-label="Search documentation" />
-        <div id="search-results" class="search-results"></div>
+  <main class="main">
+
+    <div class="hero" id="getting-started">
+      <h1>Supercell API Client</h1>
+      <p>A comprehensive TypeScript library for Clash of Clans, Clash Royale and Brawl Stars APIs with rate limiting, caching, interceptors and full type safety.</p>
+      <div class="hero-buttons">
+        <a href="#installation" class="btn btn-lg btn-primary">Get Started</a>
+        <a href="https://github.com/DARKPIX404/supercell-api" target="_blank" rel="noopener" class="btn btn-lg btn-secondary">View on GitHub</a>
       </div>
+    </div>
 
-      <section id="getting-started">
-        <h2>Getting Started</h2>
-        <p>
-          <strong>Supercell API Client</strong> is a comprehensive JavaScript library for interacting with
-          official Supercell game APIs: <strong>Clash of Clans</strong>, <strong>Clash Royale</strong>, and <strong>Brawl Stars</strong>.
-        </p>
+    <div class="features-grid">
+      <div class="feature">
+        <div class="feature-icon" style="background: rgba(59,130,246,0.15);">🎮</div>
+        <h3>Full API Coverage</h3>
+        <p>50+ methods across all 3 Supercell games</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon" style="background: rgba(16,185,129,0.15);">⚡</div>
+        <h3>Rate Limiting</h3>
+        <p>Built-in throttling with exponential backoff</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon" style="background: rgba(245,158,11,0.15);">💾</div>
+        <h3>Smart Cache</h3>
+        <p>In-memory TTL cache for repeated requests</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon" style="background: rgba(139,92,246,0.15);">🔌</div>
+        <h3>Interceptors</h3>
+        <p>Request, response and error hooks</p>
+      </div>
+    </div>
 
-        <div class="features">
-          <div class="feature-group">
-            <div class="feature-card">
-              <img src="./assets/rocket.svg" alt="Full Coverage" />
-              <h3>Full API Coverage</h3>
-              <p>All endpoints for CoC, CR and BS with 50+ methods</p>
-            </div>
-            <div class="feature-card">
-              <img src="./assets/async.svg" alt="Rate Limiting" />
-              <h3>Rate Limiting</h3>
-              <p>Built-in throttling and auto-retry with exponential backoff</p>
-            </div>
-          </div>
-          <div class="feature-group">
-            <div class="feature-card">
-              <img src="./assets/secure.svg" alt="TypeScript" />
-              <h3>TypeScript Support</h3>
-              <p>Full type definitions included out of the box</p>
-            </div>
-            <div class="feature-card">
-              <img src="./assets/cruvo.svg" alt="Proxy" />
-              <h3>Proxy Support</h3>
-              <p>Built-in proxies for development without static IP</p>
-            </div>
-          </div>
-        </div>
-      </section>
+    <div class="section" id="installation">
+      <h2>Installation</h2>
+      <pre data-lang="bash"><code>npm install @vladnet14/supercell-api</code></pre>
+    </div>
 
-      <section id="installation">
-        <h2>Installation</h2>
-        <pre data-language="bash"><code class="language-bash">npm install @vladnet14/supercell-api</code></pre>
-      </section>
-
-      <section id="usage">
-        <h2>Usage</h2>
-        <pre data-language="javascript"><code class="language-javascript">import SupercellClient from '@vladnet14/supercell-api';
+    <div class="section" id="configuration">
+      <h2>Quick Start</h2>
+      <pre data-lang="typescript"><code>import { SupercellClient } from '@vladnet14/supercell-api';
 
 const client = new SupercellClient({
   token: 'YOUR_API_TOKEN',
-  apiType: 'clashofclans', // or 'clashroyale', 'brawlstars'
-  useProxy: false, // set true if you don't have a static IP
+  apiType: 'clashofclans', // 'clashroyale' | 'brawlstars'
+  useProxy: false,
+  cacheEnabled: true,
+  cacheTtl: 60000,
 });
 
-// Get player
-const player = await client.endpoints.getPlayer('#PLAYER_TAG');
-console.log(`Player: ${player.name}, Level: ${player.expLevel}`);
+// Single player
+const player = await client.api.getPlayer('#PLAYER_TAG');
 
-// Get clan
-const clan = await client.endpoints.getClan('#CLAN_TAG');
-console.log(`Clan: ${clan.name}, Level: ${clan.clanLevel}`);
+// Batch fetch
+const players = await client.api.getPlayers(['#TAG1', '#TAG2', '#TAG3']);
 
-// Search clans
-const clans = await client.endpoints.searchClans({ name: 'CRUVO', limit: 10 });
-console.log('Found clans:', clans.items?.map((c) => c.name));</code></pre>
-      </section>
+// Clear cache when needed
+client.clearCache();</code></pre>
+    </div>
 
-      <section id="api-reference">
-        <h2>API Reference</h2>
+    <div class="section" id="interceptors">
+      <h2>Interceptors</h2>
+      <pre data-lang="typescript"><code>// Log all requests
+client.addRequestInterceptor((url, options) => {
+  console.log(`${options.method} ${url}`);
+});
 
-        <!-- ========== CLASH OF CLANS ========== -->
-        <h3 id="clash-of-clans">Clash of Clans</h3>
+// Handle errors globally
+client.addErrorInterceptor((error) => {
+  console.error('API Error:', error.message);
+});</code></pre>
+    </div>
 
-        <div class="method-card">
-          <h4>getPlayer(playerTag)</h4>
-          <p>Fetch player information by tag.</p>
-          <h5>Parameters:</h5>
-          <ul><li><code>playerTag</code> (string) — Player tag with or without '#'</li></ul>
-        </div>
+    <div class="section" id="api-reference">
+      <h2>API Reference</h2>
 
-        <div class="method-card">
-          <h4>verifyPlayerToken(playerTag, token)</h4>
-          <p>Verify player API token.</p>
-          <h5>Parameters:</h5>
-          <ul>
-            <li><code>playerTag</code> (string) — Player tag</li>
-            <li><code>token</code> (string) — Token to verify</li>
-          </ul>
-        </div>
-
-        <div class="method-card">
-          <h4>searchClans(params)</h4>
-          <p>Search for clans using filters.</p>
-          <h5>Parameters:</h5>
-          <ul>
-            <li><code>params.name</code> (string) — Clan name</li>
-            <li><code>params.warFrequency</code> (string) — War frequency</li>
-            <li><code>params.minMembers</code> (number) — Minimum members</li>
-            <li><code>params.maxMembers</code> (number) — Maximum members</li>
-            <li><code>params.minClanPoints</code> (number) — Minimum clan points</li>
-            <li><code>params.minClanLevel</code> (number) — Minimum clan level</li>
-            <li><code>params.limit</code> (number) — Max results (1-50)</li>
-            <li><code>params.after</code> (string) — Pagination cursor</li>
-            <li><code>params.before</code> (string) — Pagination cursor</li>
-            <li><code>params.labelIds</code> (string) — Label IDs comma separated</li>
-          </ul>
-        </div>
-
-        <div class="method-card">
-          <h4>getClan(clanTag)</h4>
-          <p>Fetch clan information by tag.</p>
-        </div>
-
-        <div class="method-card">
-          <h4>getClanMembers(clanTag, options)</h4>
-          <p>Get clan members.</p>
-          <h5>Options:</h5>
-          <ul>
-            <li><code>limit</code> (number) — Max results</li>
-            <li><code>after</code> / <code>before</code> (string) — Pagination cursors</li>
-          </ul>
-        </div>
-
-        <div class="method-card">
-          <h4>getClanWarLog(clanTag, options)</h4>
-          <p>Get clan war log.</p>
-        </div>
-
-        <div class="method-card">
-          <h4>getCurrentWar(clanTag)</h4>
-          <p>Get current war information.</p>
-        </div>
-
-        <div class="method-card">
-          <h4>getWarLeagueGroup(clanTag)</h4>
-          <p>Get CWL group information.</p>
-        </div>
-
-        <div class="method-card">
-          <h4>getWarLeagueWar(warTag)</h4>
-          <p>Get CWL war information.</p>
-        </div>
-
-        <div class="method-card">
-          <h4>getLocations(options)</h4>
-          <p>Get list of locations.</p>
-        </div>
-
-        <div class="method-card">
-          <h4>getLocation(locationId)</h4>
-          <p>Get location information.</p>
-        </div>
-
-        <div class="method-card">
-          <h4>getClanRankings(locationId, options)</h4>
-          <p>Get clan rankings for a location.</p>
-        </div>
-
-        <div class="method-card">
-          <h4>getPlayerRankings(locationId, options)</h4>
-          <p>Get player rankings for a location.</p>
-        </div>
-
-        <div class="method-card">
-          <h4>getVersusClanRankings(locationId, options)</h4>
-          <p>Get versus clan rankings.</p>
-        </div>
-
-        <div class="method-card">
-          <h4>getVersusPlayerRankings(locationId, options)</h4>
-          <p>Get versus player rankings.</p>
-        </div>
-
-        <div class="method-card">
-          <h4>getCapitalRankings(locationId, options)</h4>
-          <p>Get capital rankings for a location.</p>
-        </div>
-
-        <div class="method-card">
-          <h4>getLeagues(options)</h4>
-          <p>Get list of leagues.</p>
-        </div>
-
-        <div class="method-card">
-          <h4>getLeague(leagueId)</h4>
-          <p>Get league information.</p>
-        </div>
-
-        <div class="method-card">
-          <h4>getLeagueSeasons(leagueId, options)</h4>
-          <p>Get league seasons.</p>
-        </div>
-
-        <div class="method-card">
-          <h4>getLeagueSeasonRankings(leagueId, seasonId, options)</h4>
-          <p>Get league season rankings.</p>
-        </div>
-
-        <div class="method-card">
-          <h4>getPlayerLabels(options)</h4>
-          <p>Get player labels.</p>
-        </div>
-
-        <div class="method-card">
-          <h4>getClanLabels(options)</h4>
-          <p>Get clan labels.</p>
-        </div>
-
-        <div class="method-card">
-          <h4>getGoldPassSeason()</h4>
-          <p>Get current Gold Pass season.</p>
-        </div>
-
-        <!-- ========== CLASH ROYALE ========== -->
-        <h3 id="clash-royale">Clash Royale</h3>
-
-        <div class="method-card">
-          <h4>getPlayer(playerTag)</h4>
-          <p>Fetch player information by tag.</p>
-        </div>
-
-        <div class="method-card">
-          <h4>getUpcomingChests(playerTag)</h4>
-          <p>Get player's upcoming chests.</p>
-        </div>
-
-        <div class="method-card">
-          <h4>getBattleLog(playerTag)</h4>
-          <p>Get player's battle log.</p>
-        </div>
-
-        <div class="method-card">
-          <h4>searchClans(params)</h4>
-          <p>Search for clans.</p>
-          <h5>Parameters:</h5>
-          <ul>
-            <li><code>params.name</code> (string) — Clan name</li>
-            <li><code>params.locationId</code> (string) — Location ID</li>
-            <li><code>params.minMembers</code> (number) — Minimum members</li>
-            <li><code>params.maxMembers</code> (number) — Maximum members</li>
-            <li><code>params.minScore</code> (number) — Minimum score</li>
-            <li><code>params.limit</code> (number) — Max results</li>
-          </ul>
-        </div>
-
-        <div class="method-card">
-          <h4>getClan(clanTag)</h4>
-          <p>Fetch clan information by tag.</p>
-        </div>
-
-        <div class="method-card">
-          <h4>getClanMembers(clanTag, options)</h4>
-          <p>Get clan members.</p>
-        </div>
-
-        <div class="method-card">
-          <h4>getClanWarLog(clanTag, options)</h4>
-          <p>Get clan war log.</p>
-        </div>
-
-        <div class="method-card">
-          <h4>getCurrentWar(clanTag)</h4>
-          <p>Get current war information.</p>
-        </div>
-
-        <div class="method-card">
-          <h4>searchTournaments(params)</h4>
-          <p>Search tournaments.</p>
-        </div>
-
-        <div class="method-card">
-          <h4>getTournament(tournamentTag)</h4>
-          <p>Get tournament by tag.</p>
-        </div>
-
-        <div class="method-card">
-          <h4>getCards(options)</h4>
-          <p>Get all cards.</p>
-        </div>
-
-        <div class="method-card">
-          <h4>getLocations(options)</h4>
-          <p>Get list of locations.</p>
-        </div>
-
-        <div class="method-card">
-          <h4>getLocation(locationId)</h4>
-          <p>Get location information.</p>
-        </div>
-
-        <div class="method-card">
-          <h4>getPlayerRankings(locationId, options)</h4>
-          <p>Get player rankings for a location.</p>
-        </div>
-
-        <div class="method-card">
-          <h4>getClanRankings(locationId, options)</h4>
-          <p>Get clan rankings for a location.</p>
-        </div>
-
-        <div class="method-card">
-          <h4>getClanWarRankings(locationId, options)</h4>
-          <p>Get clan war rankings for a location.</p>
-        </div>
-
-        <div class="method-card">
-          <h4>getChallenges(options)</h4>
-          <p>Get current challenges.</p>
-        </div>
-
-        <div class="method-card">
-          <h4>getGlobalTournaments(options)</h4>
-          <p>Get global tournaments.</p>
-        </div>
-
-        <!-- ========== BRAWL STARS ========== -->
-        <h3 id="brawl-stars">Brawl Stars</h3>
-
-        <div class="method-card">
-          <h4>getPlayer(playerTag)</h4>
-          <p>Fetch player information by tag.</p>
-        </div>
-
-        <div class="method-card">
-          <h4>getBattleLog(playerTag)</h4>
-          <p>Get player's battle log.</p>
-        </div>
-
-        <div class="method-card">
-          <h4>getClub(clubTag)</h4>
-          <p>Fetch club information by tag.</p>
-        </div>
-
-        <div class="method-card">
-          <h4>getClubMembers(clubTag, options)</h4>
-          <p>Get club members.</p>
-        </div>
-
-        <div class="method-card">
-          <h4>getBrawlers(options)</h4>
-          <p>Get list of brawlers.</p>
-        </div>
-
-        <div class="method-card">
-          <h4>getBrawler(brawlerId)</h4>
-          <p>Get brawler by ID.</p>
-        </div>
-
-        <div class="method-card">
-          <h4>getPlayerRankings(countryCode, options)</h4>
-          <p>Get player rankings for a country.</p>
-          <h5>Parameters:</h5>
-          <ul>
-            <li><code>countryCode</code> (string) — e.g. 'global', 'US'</li>
-          </ul>
-        </div>
-
-        <div class="method-card">
-          <h4>getClubRankings(countryCode, options)</h4>
-          <p>Get club rankings for a country.</p>
-        </div>
-
-        <div class="method-card">
-          <h4>getBrawlerRankings(countryCode, brawlerId, options)</h4>
-          <p>Get brawler rankings for a country.</p>
-        </div>
-
-        <div class="method-card">
-          <h4>getEvents()</h4>
-          <p>Get current and upcoming events rotation.</p>
-        </div>
-      </section>
-    </main>
-
-    <footer class="site-footer">
-      <div class="footer-container">
-        <div class="footer-links">
-          <h3>Quick Links</h3>
-          <ul>
-            <li><a href="https://github.com/DARKPIX404/supercell-api" target="_blank">GitHub</a></li>
-            <li><a href="https://www.npmjs.com/package/@vladnet14/supercell-api" target="_blank">npm</a></li>
-          </ul>
-        </div>
-        <p class="copyright">© 2025 DARKPIX404. All rights reserved.</p>
+      <div class="tabs">
+        <button class="tab active" data-tab="coc">Clash of Clans</button>
+        <button class="tab" data-tab="cr">Clash Royale</button>
+        <button class="tab" data-tab="bs">Brawl Stars</button>
       </div>
-    </footer>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/javascript.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/bash.min.js"></script>
-    <script src="./js/main.js"></script>
-    <script>hljs.highlightAll();</script>
-  </body>
+      <!-- Clash of Clans -->
+      <div class="tab-panel active" id="panel-coc">
+        <h3 id="clash-of-clans">Clash of Clans</h3>
+        <div class="method-grid">
+          <div class="method">
+            <div class="method-header">
+              <span class="method-name">getPlayer(tag)</span>
+              <span class="method-badge">GET</span>
+            </div>
+            <p>Fetch player information by tag.</p>
+          </div>
+          <div class="method">
+            <div class="method-header">
+              <span class="method-name">verifyPlayerToken(tag, token)</span>
+              <span class="method-badge">POST</span>
+            </div>
+            <p>Verify player API token.</p>
+          </div>
+          <div class="method">
+            <div class="method-header">
+              <span class="method-name">searchClans(params)</span>
+              <span class="method-badge">GET</span>
+            </div>
+            <p>Search clans with filters: name, warFrequency, minMembers, maxMembers, minClanPoints, minClanLevel, limit, labelIds.</p>
+          </div>
+          <div class="method">
+            <div class="method-header">
+              <span class="method-name">getClan(tag)</span>
+              <span class="method-badge">GET</span>
+            </div>
+            <p>Fetch clan information by tag.</p>
+          </div>
+          <div class="method">
+            <div class="method-header">
+              <span class="method-name">getClanMembers(tag, options)</span>
+              <span class="method-badge">GET</span>
+            </div>
+            <p>Get clan members list with pagination.</p>
+          </div>
+          <div class="method">
+            <div class="method-header">
+              <span class="method-name">getClanWarLog(tag, options)</span>
+              <span class="method-badge">GET</span>
+            </div>
+            <p>Get clan war log with pagination.</p>
+          </div>
+          <div class="method">
+            <div class="method-header">
+              <span class="method-name">getCurrentWar(tag)</span>
+              <span class="method-badge">GET</span>
+            </div>
+            <p>Get current war information.</p>
+          </div>
+          <div class="method">
+            <div class="method-header">
+              <span class="method-name">getWarLeagueGroup(tag)</span>
+              <span class="method-badge">GET</span>
+            </div>
+            <p>Get Clan War League group.</p>
+          </div>
+          <div class="method">
+            <div class="method-header">
+              <span class="method-name">getWarLeagueWar(warTag)</span>
+              <span class="method-badge">GET</span>
+            </div>
+            <p>Get CWL war details by war tag.</p>
+          </div>
+          <div class="method">
+            <div class="method-header">
+              <span class="method-name">getLocations(options)</span>
+              <span class="method-badge">GET</span>
+            </div>
+            <p>Get list of available locations.</p>
+          </div>
+          <div class="method">
+            <div class="method-header">
+              <span class="method-name">getLocation(locationId)</span>
+              <span class="method-badge">GET</span>
+            </div>
+            <p>Get specific location details.</p>
+          </div>
+          <div class="method">
+            <div class="method-header">
+              <span class="method-name">getClanRankings(locationId, options)</span>
+              <span class="method-badge">GET</span>
+            </div>
+            <p>Get clan rankings for a location.</p>
+          </div>
+          <div class="method">
+            <div class="method-header">
+              <span class="method-name">getPlayerRankings(locationId, options)</span>
+              <span class="method-badge">GET</span>
+            </div>
+            <p>Get player rankings for a location.</p>
+          </div>
+          <div class="method">
+            <div class="method-header">
+              <span class="method-name">getVersusClanRankings(locationId, options)</span>
+              <span class="method-badge">GET</span>
+            </div>
+            <p>Get versus clan rankings.</p>
+          </div>
+          <div class="method">
+            <div class="method-header">
+              <span class="method-name">getVersusPlayerRankings(locationId, options)</span>
+              <span class="method-badge">GET</span>
+            </div>
+            <p>Get versus player rankings.</p>
+          </div>
+          <div class="method">
+            <div class="method-header">
+              <span class="method-name">getCapitalRankings(locationId, options)</span>
+              <span class="method-badge">GET</span>
+            </div>
+            <p>Get capital rankings for a location.</p>
+          </div>
+          <div class="method">
+            <div class="method-header">
+              <span class="method-name">getLeagues(options)</span>
+              <span class="method-badge">GET</span>
+            </div>
+            <p>Get list of leagues.</p>
+          </div>
+          <div class="method">
+            <div class="method-header">
+              <span class="method-name">getLeague(leagueId)</span>
+              <span class="method-badge">GET</span>
+            </div>
+            <p>Get league information.</p>
+          </div>
+          <div class="method">
+            <div class="method-header">
+              <span class="method-name">getLeagueSeasons(leagueId, options)</span>
+              <span class="method-badge">GET</span>
+            </div>
+            <p>Get league seasons.</p>
+          </div>
+          <div class="method">
+            <div class="method-header">
+              <span class="method-name">getLeagueSeasonRankings(leagueId, seasonId, options)</span>
+              <span class="method-badge">GET</span>
+            </div>
+            <p>Get season rankings for a league.</p>
+          </div>
+          <div class="method">
+            <div class="method-header">
+              <span class="method-name">getPlayerLabels(options)</span>
+              <span class="method-badge">GET</span>
+            </div>
+            <p>Get available player labels.</p>
+          </div>
+          <div class="method">
+            <div class="method-header">
+              <span class="method-name">getClanLabels(options)</span>
+              <span class="method-badge">GET</span>
+            </div>
+            <p>Get available clan labels.</p>
+          </div>
+          <div class="method">
+            <div class="method-header">
+              <span class="method-name">getGoldPassSeason()</span>
+              <span class="method-badge">GET</span>
+            </div>
+            <p>Get current Gold Pass season.</p>
+          </div>
+          <div class="method">
+            <div class="method-header">
+              <span class="method-name">getPlayers(tags[])</span>
+              <span class="method-badge">BATCH</span>
+            </div>
+            <p>Fetch multiple players in parallel.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Clash Royale -->
+      <div class="tab-panel" id="panel-cr">
+        <h3 id="clash-royale">Clash Royale</h3>
+        <div class="method-grid">
+          <div class="method">
+            <div class="method-header">
+              <span class="method-name">getPlayer(tag)</span>
+              <span class="method-badge">GET</span>
+            </div>
+            <p>Fetch player information by tag.</p>
+          </div>
+          <div class="method">
+            <div class="method-header">
+              <span class="method-name">getUpcomingChests(tag)</span>
+              <span class="method-badge">GET</span>
+            </div>
+            <p>Get player's upcoming chest cycle.</p>
+          </div>
+          <div class="method">
+            <div class="method-header">
+              <span class="method-name">getBattleLog(tag)</span>
+              <span class="method-badge">GET</span>
+            </div>
+            <p>Get recent battle log.</p>
+          </div>
+          <div class="method">
+            <div class="method-header">
+              <span class="method-name">searchClans(params)</span>
+              <span class="method-badge">GET</span>
+            </div>
+            <p>Search clans with filters.</p>
+          </div>
+          <div class="method">
+            <div class="method-header">
+              <span class="method-name">getClan(tag)</span>
+              <span class="method-badge">GET</span>
+            </div>
+            <p>Fetch clan information.</p>
+          </div>
+          <div class="method">
+            <div class="method-header">
+              <span class="method-name">getClanMembers(tag, options)</span>
+              <span class="method-badge">GET</span>
+            </div>
+            <p>Get clan members.</p>
+          </div>
+          <div class="method">
+            <div class="method-header">
+              <span class="method-name">getClanWarLog(tag, options)</span>
+              <span class="method-badge">GET</span>
+            </div>
+            <p>Get clan war log.</p>
+          </div>
+          <div class="method">
+            <div class="method-header">
+              <span class="method-name">getCurrentWar(tag)</span>
+              <span class="method-badge">GET</span>
+            </div>
+            <p>Get current war info.</p>
+          </div>
+          <div class="method">
+            <div class="method-header">
+              <span class="method-name">searchTournaments(params)</span>
+              <span class="method-badge">GET</span>
+            </div>
+            <p>Search tournaments.</p>
+          </div>
+          <div class="method">
+            <div class="method-header">
+              <span class="method-name">getTournament(tag)</span>
+              <span class="method-badge">GET</span>
+            </div>
+            <p>Get tournament details.</p>
+          </div>
+          <div class="method">
+            <div class="method-header">
+              <span class="method-name">getCards(options)</span>
+              <span class="method-badge">GET</span>
+            </div>
+            <p>Get all cards.</p>
+          </div>
+          <div class="method">
+            <div class="method-header">
+              <span class="method-name">getLocations(options)</span>
+              <span class="method-badge">GET</span>
+            </div>
+            <p>Get locations list.</p>
+          </div>
+          <div class="method">
+            <div class="method-header">
+              <span class="method-name">getLocation(locationId)</span>
+              <span class="method-badge">GET</span>
+            </div>
+            <p>Get location details.</p>
+          </div>
+          <div class="method">
+            <div class="method-header">
+              <span class="method-name">getPlayerRankings(locationId, options)</span>
+              <span class="method-badge">GET</span>
+            </div>
+            <p>Get player rankings.</p>
+          </div>
+          <div class="method">
+            <div class="method-header">
+              <span class="method-name">getClanRankings(locationId, options)</span>
+              <span class="method-badge">GET</span>
+            </div>
+            <p>Get clan rankings.</p>
+          </div>
+          <div class="method">
+            <div class="method-header">
+              <span class="method-name">getClanWarRankings(locationId, options)</span>
+              <span class="method-badge">GET</span>
+            </div>
+            <p>Get clan war rankings.</p>
+          </div>
+          <div class="method">
+            <div class="method-header">
+              <span class="method-name">getChallenges(options)</span>
+              <span class="method-badge">GET</span>
+            </div>
+            <p>Get current challenges.</p>
+          </div>
+          <div class="method">
+            <div class="method-header">
+              <span class="method-name">getGlobalTournaments(options)</span>
+              <span class="method-badge">GET</span>
+            </div>
+            <p>Get global tournaments.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Brawl Stars -->
+      <div class="tab-panel" id="panel-bs">
+        <h3 id="brawl-stars">Brawl Stars</h3>
+        <div class="method-grid">
+          <div class="method">
+            <div class="method-header">
+              <span class="method-name">getPlayer(tag)</span>
+              <span class="method-badge">GET</span>
+            </div>
+            <p>Fetch player information by tag.</p>
+          </div>
+          <div class="method">
+            <div class="method-header">
+              <span class="method-name">getBattleLog(tag)</span>
+              <span class="method-badge">GET</span>
+            </div>
+            <p>Get player's recent battle log.</p>
+          </div>
+          <div class="method">
+            <div class="method-header">
+              <span class="method-name">getClub(tag)</span>
+              <span class="method-badge">GET</span>
+            </div>
+            <p>Fetch club information.</p>
+          </div>
+          <div class="method">
+            <div class="method-header">
+              <span class="method-name">getClubMembers(tag, options)</span>
+              <span class="method-badge">GET</span>
+            </div>
+            <p>Get club members with pagination.</p>
+          </div>
+          <div class="method">
+            <div class="method-header">
+              <span class="method-name">getBrawlers(options)</span>
+              <span class="method-badge">GET</span>
+            </div>
+            <p>Get list of all brawlers.</p>
+          </div>
+          <div class="method">
+            <div class="method-header">
+              <span class="method-name">getBrawler(brawlerId)</span>
+              <span class="method-badge">GET</span>
+            </div>
+            <p>Get brawler details by ID.</p>
+          </div>
+          <div class="method">
+            <div class="method-header">
+              <span class="method-name">getPlayerRankings(countryCode, options)</span>
+              <span class="method-badge">GET</span>
+            </div>
+            <p>Get player rankings for a country (e.g. 'global', 'US').</p>
+          </div>
+          <div class="method">
+            <div class="method-header">
+              <span class="method-name">getClubRankings(countryCode, options)</span>
+              <span class="method-badge">GET</span>
+            </div>
+            <p>Get club rankings for a country.</p>
+          </div>
+          <div class="method">
+            <div class="method-header">
+              <span class="method-name">getBrawlerRankings(countryCode, brawlerId, options)</span>
+              <span class="method-badge">GET</span>
+            </div>
+            <p>Get brawler rankings for a country.</p>
+          </div>
+          <div class="method">
+            <div class="method-header">
+              <span class="method-name">getEvents()</span>
+              <span class="method-badge">GET</span>
+            </div>
+            <p>Get current and upcoming events rotation.</p>
+          </div>
+          <div class="method">
+            <div class="method-header">
+              <span class="method-name">getPlayers(tags[])</span>
+              <span class="method-badge">BATCH</span>
+            </div>
+            <p>Fetch multiple players in parallel.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-links">
+      <a href="https://darkpix.ru" target="_blank" rel="noopener">Website</a>
+      <a href="https://github.com/DARKPIX404" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://discord.gg/dYkUJQaU6y" target="_blank" rel="noopener">Discord</a>
+      <a href="https://www.npmjs.com/package/@vladnet14/supercell-api" target="_blank" rel="noopener">npm</a>
+    </div>
+    <div class="footer-copy">© 2025 DARKPIX404. All rights reserved.</div>
+  </div>
+</footer>
+
+<script src="./js/main.js"></script>
+</body>
 </html>
