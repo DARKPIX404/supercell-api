@@ -35,6 +35,5 @@ yarn-error.log*
 # Локальные ключи и токены
 secrets.json
 
-package-lock.json
 docs/.vitepress/cache
 docs/.vitepress/dist
